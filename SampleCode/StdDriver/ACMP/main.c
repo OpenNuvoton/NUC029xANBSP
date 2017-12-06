@@ -92,13 +92,15 @@ void SYS_Init(void)
     /* Init I/O Multi-function                                                                                 */
     /*---------------------------------------------------------------------------------------------------------*/
     /* Set P1.5 multi-function pin for ACMP0 positive input pin */
-    SYS->P1_MFP = SYS_MFP_P15_ACMP0_P;
+    SYS->P1_MFP &= ~SYS_MFP_P15_Msk;
+    SYS->P1_MFP |= SYS_MFP_P15_ACMP0_P;
 
     /* Disable digital input path of analog pin ACMP0_P to prevent leakage */
     GPIO_DISABLE_DIGITAL_PATH(P1, BIT5);
 
     /* Set P3 multi-function pins for UART0 RXD, TXD and ACMP0 output */
-    SYS->P3_MFP = SYS_MFP_P30_RXD0 | SYS_MFP_P31_TXD0 | SYS_MFP_P36_ACMP0_O;
+    SYS->P3_MFP &= ~(SYS_MFP_P30_Msk | SYS_MFP_P31_Msk | SYS_MFP_P36_Msk);
+    SYS->P3_MFP |= (SYS_MFP_P30_RXD0 | SYS_MFP_P31_TXD0 | SYS_MFP_P36_ACMP0_O);
 }
 
 /*** (C) COPYRIGHT 2014 Nuvoton Technology Corp. ***/
