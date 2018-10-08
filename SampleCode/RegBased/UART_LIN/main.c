@@ -93,17 +93,17 @@ void LIN_FunctionTest()
         printf("%c\n", u32Item);
         switch(u32Item)
         {
-        case '1':
-            LIN_SendHeader(0x30);
-            break;
-        case '2':
-            LIN_MasterTest(0x35, MODE_CLASSIC);
-            break;
-        case '3':
-            LIN_MasterTest(0x12, MODE_ENHANCED);
-            break;
-        default:
-            break;
+            case '1':
+                LIN_SendHeader(0x30);
+                break;
+            case '2':
+                LIN_MasterTest(0x35, MODE_CLASSIC);
+                break;
+            case '3':
+                LIN_MasterTest(0x12, MODE_ENHANCED);
+                break;
+            default:
+                break;
         }
     }
     while(u32Item != 27);
@@ -131,7 +131,7 @@ void LIN_MasterTest(uint32_t u32id, uint32_t u32ModeSel)
 /*---------------------------------------------------------------------------------------------------------*/
 uint8_t GetParityValue(uint32_t u32id)
 {
-    uint32_t u32Res = 0, ID[6], p_Bit[2] , mask = 0;
+    uint32_t u32Res = 0, ID[6], p_Bit[2], mask = 0;
 
     for(mask = 0; mask < 6; mask++)
         ID[mask] = (u32id & (1 << mask)) >> mask;
@@ -224,8 +224,8 @@ void SYS_Init(void)
     CLK->CLKDIV = (CLK->CLKDIV & (~CLK_CLKDIV_HCLK_N_Msk)) | CLK_CLKDIV_HCLK(1);
 
     /* Set PLL to power down mode and PLL_STB bit in CLKSTATUS register will be cleared by hardware */
-    CLK->PLLCON |= CLK_PLLCON_PD_Msk;    
-    
+    CLK->PLLCON |= CLK_PLLCON_PD_Msk;
+
     /* Enable external XTAL 12MHz clock */
     CLK->PWRCON |= CLK_PWRCON_XTL12M_EN_Msk;
 
@@ -323,7 +323,7 @@ int main(void)
 
     /* UART sample LIN function */
     LIN_FunctionTest();
-    
+
     while(1);
 
 }

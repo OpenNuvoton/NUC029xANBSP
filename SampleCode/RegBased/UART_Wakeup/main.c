@@ -29,11 +29,11 @@ void UART_CTSWakeUpTest(void);
 void UART1_IRQHandler(void)
 {
     uint32_t u32IntSts = UART1->ISR;
-    
+
     if(u32IntSts & UART_ISR_MODEM_IF_Msk)   /* UART Modem Status interrupt flag */
     {
-        printf("UART Modem Status interrupt happen.");        
-        UART1->MSR |= UART_MSR_DCTSF_Msk;   /* Clear UART Modem Status interrupt flag */         
+        printf("UART Modem Status interrupt happen.");
+        UART1->MSR |= UART_MSR_DCTSF_Msk;   /* Clear UART Modem Status interrupt flag */
     }
 }
 
@@ -60,13 +60,13 @@ void UART_CTSWakeUpTest(void)
 
     printf("+----------------------------------------------------------+\n");
     printf("|   Power-Down and Wake-up by UART interrupt Sample Code   |\n");
-    printf("+----------------------------------------------------------+\n\n");    
-    
+    printf("+----------------------------------------------------------+\n\n");
+
     /* Clear Modem Status interrupt before entering Power-down mode */
     UART1->MSR |= UART_MSR_DCTSF_Msk;
 
     /* Enable UART Wake-up function and Modem Status interrupt */
-    UART1->IER |= (UART_IER_WAKE_EN_Msk|UART_IER_MODEM_IEN_Msk);
+    UART1->IER |= (UART_IER_WAKE_EN_Msk | UART_IER_MODEM_IEN_Msk);
     NVIC_EnableIRQ(UART1_IRQn);
 
     printf("System enter to Power-down mode.\n");
@@ -76,17 +76,17 @@ void UART_CTSWakeUpTest(void)
     SYS_UnlockReg();
 
     /* Enter to Power-down mode */
-    PowerDownFunction(); 
+    PowerDownFunction();
 
     /* Lock protected registers after entering Power-down mode */
     SYS_LockReg();
 
     /* Disable UART Wake-up function and Modem Status interrupt */
-    UART1->IER &= ~(UART_IER_WAKE_EN_Msk|UART_IER_MODEM_IEN_Msk);
+    UART1->IER &= ~(UART_IER_WAKE_EN_Msk | UART_IER_MODEM_IEN_Msk);
     NVIC_DisableIRQ(UART1_IRQn);
-       
-    printf("\nSystem waken-up done.\n");       
-    printf("\nUART Sample Program End.\n");    
+
+    printf("\nSystem waken-up done.\n");
+    printf("\nUART Sample Program End.\n");
 
 }
 
@@ -195,9 +195,9 @@ int main(void)
 
     /* Init UART0 for printf */
     UART0_Init();
-    
+
     /* Init UART1 for testing */
-    UART1_Init();    
+    UART1_Init();
 
     /*---------------------------------------------------------------------------------------------------------*/
     /* SAMPLE CODE                                                                                             */

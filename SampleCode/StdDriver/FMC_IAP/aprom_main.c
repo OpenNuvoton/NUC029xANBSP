@@ -199,44 +199,44 @@ int main()
 
         switch(u8Item)
         {
-        case '0':
-            FMC_EnableLDUpdate();
-            if(LoadImage((uint32_t)&loaderImage1Base, (uint32_t)&loaderImage1Limit,
-                         FMC_LDROM_BASE, FMC_LDROM_SIZE) != 0)
-            {
-                printf("Load image to LDROM failed!\n");
-                goto lexit;
-            }
-            FMC_DisableLDUpdate();
-            break;
+            case '0':
+                FMC_EnableLDUpdate();
+                if(LoadImage((uint32_t)&loaderImage1Base, (uint32_t)&loaderImage1Limit,
+                             FMC_LDROM_BASE, FMC_LDROM_SIZE) != 0)
+                {
+                    printf("Load image to LDROM failed!\n");
+                    goto lexit;
+                }
+                FMC_DisableLDUpdate();
+                break;
 
-        case '1':
-            printf("\n\nChange VECMAP and branch to LDROM...\n");
-            UART_WAIT_TX_EMPTY(UART0); /* To make sure all message has been print out */
+            case '1':
+                printf("\n\nChange VECMAP and branch to LDROM...\n");
+                UART_WAIT_TX_EMPTY(UART0); /* To make sure all message has been print out */
 
-            /* Mask all interrupt before changing VECMAP to avoid wrong interrupt handler fetched */
-            __set_PRIMASK(1);
+                /* Mask all interrupt before changing VECMAP to avoid wrong interrupt handler fetched */
+                __set_PRIMASK(1);
 
-            /* Set VECMAP to LDROM for booting from LDROM */
-            FMC_SetVectorPageAddr(FMC_LDROM_BASE);
+                /* Set VECMAP to LDROM for booting from LDROM */
+                FMC_SetVectorPageAddr(FMC_LDROM_BASE);
 
-            /* Reset All IP before boot to new AP */
-            SYS->IPRSTC2 = 0xFFFFFFFF;
-            SYS->IPRSTC2 = 0;
-            
-            /* Obtain Reset Handler address of new boot. */
-            ResetFunc = (FUNC_PTR *)M32(4);  
+                /* Reset All IP before boot to new AP */
+                SYS->IPRSTC2 = 0xFFFFFFFF;
+                SYS->IPRSTC2 = 0;
 
-            /* Set Main Stack Pointer register of new boot */ 
-            __set_MSP(M32(0));
-            
-            /* Call reset handler of new boot */
-            ResetFunc();       
+                /* Obtain Reset Handler address of new boot. */
+                ResetFunc = (FUNC_PTR *)M32(4);
 
-            break;
+                /* Set Main Stack Pointer register of new boot */
+                __set_MSP(M32(0));
 
-        default :
-            break;
+                /* Call reset handler of new boot */
+                ResetFunc();
+
+                break;
+
+            default :
+                break;
         }
     }
     while(1);

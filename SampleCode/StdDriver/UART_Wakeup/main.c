@@ -56,13 +56,13 @@ void UART_CTSWakeUpTest(void)
 
     printf("+----------------------------------------------------------+\n");
     printf("|   Power-Down and Wake-up by UART interrupt Sample Code   |\n");
-    printf("+----------------------------------------------------------+\n\n");    
-    
+    printf("+----------------------------------------------------------+\n\n");
+
     /* Clear Modem Status interrupt before entering Power-down mode */
     UART_ClearIntFlag(UART1, UART_ISR_MODEM_INT_Msk);
 
     /* Enable UART Wake-up function and Modem Status interrupt */
-    UART_EnableInt(UART1, UART_IER_WAKE_EN_Msk|UART_IER_MODEM_IEN_Msk);
+    UART_EnableInt(UART1, UART_IER_WAKE_EN_Msk | UART_IER_MODEM_IEN_Msk);
 
     printf("System enter to Power-down mode.\n");
     printf("Toggle nCTS of UART1 to wake-up system.\n\n");
@@ -71,16 +71,16 @@ void UART_CTSWakeUpTest(void)
     SYS_UnlockReg();
 
     /* Enter to Power-down mode */
-    PowerDownFunction(); 
+    PowerDownFunction();
 
     /* Lock protected registers after entering Power-down mode */
     SYS_LockReg();
 
     /* Disable UART Wake-up function and Modem Status interrupt */
-    UART_DisableInt(UART1, UART_IER_WAKE_EN_Msk|UART_IER_MODEM_IEN_Msk);
-       
-    printf("\nSystem waken-up done.\n");       
-    printf("\nUART Sample Program End.\n");    
+    UART_DisableInt(UART1, UART_IER_WAKE_EN_Msk | UART_IER_MODEM_IEN_Msk);
+
+    printf("\nSystem waken-up done.\n");
+    printf("\nUART Sample Program End.\n");
 
 }
 
@@ -110,11 +110,11 @@ void SYS_Init(void)
 
     /* Enable UART module clock */
     CLK_EnableModuleClock(UART0_MODULE);
-    CLK_EnableModuleClock(UART1_MODULE);    
+    CLK_EnableModuleClock(UART1_MODULE);
 
     /* Select UART module clock source */
     CLK_SetModuleClock(UART0_MODULE, CLK_CLKSEL1_UART_S_HXT, CLK_CLKDIV_UART(1));
-    CLK_SetModuleClock(UART1_MODULE, CLK_CLKSEL1_UART_S_HXT, CLK_CLKDIV_UART(1));    
+    CLK_SetModuleClock(UART1_MODULE, CLK_CLKSEL1_UART_S_HXT, CLK_CLKDIV_UART(1));
 
     /*---------------------------------------------------------------------------------------------------------*/
     /* Init I/O Multi-function                                                                                 */
@@ -174,9 +174,9 @@ int main(void)
 
     /* Init UART0 for printf */
     UART0_Init();
-    
+
     /* Init UART1 for testing */
-    UART1_Init();    
+    UART1_Init();
 
     /*---------------------------------------------------------------------------------------------------------*/
     /* SAMPLE CODE                                                                                             */

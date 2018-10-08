@@ -41,9 +41,9 @@ void I2C0_IRQHandler(void)
     {
         /* Clear I2C Wake-up interrupt flag */
         I2C_CLEAR_WAKEUP_FLAG(I2C0);
-			
-        g_u8SlvI2CWK = 1;		
-			
+
+        g_u8SlvI2CWK = 1;
+
         return;
     }
 
@@ -267,7 +267,7 @@ int32_t main(void)
 
     /* I2C function to Transmit/Receive data as slave */
     s_I2C0HandlerFn = I2C_SlaveTRx;
-		
+
     /* Set I2C0 enter Not Address SLAVE mode */
     I2C_SET_CONTROL_REG(I2C0, I2C_I2CON_SI_AA);
 
@@ -291,7 +291,7 @@ int32_t main(void)
     CLK->PWRCON |= CLK_PWRCON_PWR_DOWN_EN_Msk;
 
     printf("\n");
-    printf("Enter PD 0x%x 0x%x\n", I2C0->I2CON , I2C0->I2CSTATUS);
+    printf("Enter PD 0x%x 0x%x\n", I2C0->I2CON, I2C0->I2CSTATUS);
     printf("\n");
     printf("CHIP enter power down status.\n");
     /* Waiting for UART printf finish*/
@@ -309,10 +309,10 @@ int32_t main(void)
     __NOP();
     __NOP();
 
-    while((g_u8SlvPWRDNWK & g_u8SlvI2CWK) == 0);    
-    printf("Power-down Wake-up INT 0x%x\n", ((CLK->PWRCON) & CLK_PWRCON_PD_WU_STS_Msk));		
+    while((g_u8SlvPWRDNWK & g_u8SlvI2CWK) == 0);
+    printf("Power-down Wake-up INT 0x%x\n", ((CLK->PWRCON) & CLK_PWRCON_PD_WU_STS_Msk));
     printf("I2C0 WAKE INT 0x%x\n", I2C0->I2CWKUPSTS);
-		
+
     /* Disable power wake-up interrupt */
     CLK->PWRCON &= ~CLK_PWRCON_PD_WU_INT_EN_Msk;
     NVIC_DisableIRQ(PWRWU_IRQn);

@@ -291,7 +291,7 @@ int32_t main(void)
 
     /* Unlock protected registers */
     SYS_UnlockReg();
-    
+
     /* Init System, peripheral clock and multi-function I/O */
     SYS_Init();
 
@@ -314,7 +314,7 @@ int32_t main(void)
 
     /* UART RS485 sample slave function */
     RS485_9bitModeSlave();
-    
+
     while(1);
 
 }
