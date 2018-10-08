@@ -46,7 +46,7 @@ volatile uint32_t g_u32Pulse = 0;
 */
 static const uint16_t g_au16ScaleFreq[7] = {TENOR_C, TENOR_D, TENOR_E, TENOR_F, TENOR_G, TENOR_A, TENOR_B};
 static const uint16_t g_au16ScaleCnr[7] =  {11471, 10220, 9103, 8594, 7652, 6817, 6071};
-static const uint16_t g_au16ScaleCmr[7] =  {6882 , 6131 , 5461, 5156, 4590, 4089, 3642};
+static const uint16_t g_au16ScaleCmr[7] =  {6882, 6131, 5461, 5156, 4590, 4089, 3642};
 
 /**
  * @brief       PWMA IRQ Handler
@@ -212,18 +212,18 @@ int32_t main(void)
 
         switch(u8Item)
         {
-        case '1':
-        case '2':
-        case '3':
-        case '4':
-        case '5':
-        case '6':
-        case '7':
-            g_u16Frequency = g_au16ScaleFreq[(u8Item - '1')];
-            break;
-        default:
-            u8ItemOK = 0;
-            break;
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+                g_u16Frequency = g_au16ScaleFreq[(u8Item - '1')];
+                break;
+            default:
+                u8ItemOK = 0;
+                break;
         }
 
         if(u8ItemOK)

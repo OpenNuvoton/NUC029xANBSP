@@ -53,7 +53,7 @@ int32_t main(void)
     __NOP();
     /* Clear ACMP 0 interrupt flag */
     ACMP_CLR_INT_FLAG(ACMP01, 0);
-    
+
     /* Enable ACMP0 interrupt function */
     ACMP_ENABLE_INT(ACMP01, 0);
 

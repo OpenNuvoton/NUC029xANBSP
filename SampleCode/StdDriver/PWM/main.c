@@ -214,18 +214,18 @@ int32_t main(void)
 
         switch(u8Item)
         {
-        case '1':
-        case '2':
-        case '3':
-        case '4':
-        case '5':
-        case '6':
-        case '7':
-            g_u16Frequency = g_au16ScaleFreq[(u8Item - '1')];
-            break;
-        default:
-            u8ItemOK = 0;
-            break;
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+                g_u16Frequency = g_au16ScaleFreq[(u8Item - '1')];
+                break;
+            default:
+                u8ItemOK = 0;
+                break;
         }
 
         if(u8ItemOK)

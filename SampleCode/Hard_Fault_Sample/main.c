@@ -56,8 +56,8 @@ int main()
     SYS_LockReg();
 
     /* Init UART0 for printf */
-    UART0_Init();    
-    
+    UART0_Init();
+
     strcpy(tmp, "HardFaultTest");
 
     while(1);

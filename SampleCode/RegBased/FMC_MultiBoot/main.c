@@ -169,21 +169,21 @@ int32_t main(void)
     ch = getchar();
     switch(ch)
     {
-    case '0':
-        FMC_SetVectorPageAddr(0x1000);
-        break;
-    case '1':
-        FMC_SetVectorPageAddr(0x2000);
-        break;
-    case '2':
-        FMC_SetVectorPageAddr(0x3000);
-        break;
-    case '3':
-        FMC_SetVectorPageAddr(0x4000);
-        break;
-    default:
-        FMC_SetVectorPageAddr(0x0);
-        break;
+        case '0':
+            FMC_SetVectorPageAddr(0x1000);
+            break;
+        case '1':
+            FMC_SetVectorPageAddr(0x2000);
+            break;
+        case '2':
+            FMC_SetVectorPageAddr(0x3000);
+            break;
+        case '3':
+            FMC_SetVectorPageAddr(0x4000);
+            break;
+        default:
+            FMC_SetVectorPageAddr(0x0);
+            break;
     }
 
     /* Reset CPU only to reset to new vector page */

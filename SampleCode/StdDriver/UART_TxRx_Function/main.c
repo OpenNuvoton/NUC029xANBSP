@@ -121,7 +121,7 @@ int main(void)
 
     /* UART sample function */
     UART_FunctionTest();
-    
+
     while(1);
 
 }
@@ -178,7 +178,7 @@ void UART_TEST_HANDLE()
         if(g_u32comRhead != tmp)
         {
             u8InChar = g_u8RecData[g_u32comRhead];
-            while(UART_IS_TX_FULL(UART0));  /* Wait Tx is not full to transmit data */                        
+            while(UART_IS_TX_FULL(UART0));  /* Wait Tx is not full to transmit data */
             UART_WRITE(UART0, u8InChar);
             g_u32comRhead = (g_u32comRhead == (RXBUFSIZE - 1)) ? 0 : (g_u32comRhead + 1);
             g_u32comRbytes--;

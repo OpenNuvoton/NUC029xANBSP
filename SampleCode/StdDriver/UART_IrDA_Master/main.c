@@ -194,7 +194,7 @@ int main(void)
 
     /* UART sample IrDA Master function */
     IrDA_FunctionTxTest();
-    
+
     while(1);
 
 }

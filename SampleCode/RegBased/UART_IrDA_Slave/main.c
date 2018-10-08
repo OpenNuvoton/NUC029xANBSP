@@ -117,8 +117,8 @@ void SYS_Init(void)
     CLK->CLKDIV = (CLK->CLKDIV & (~CLK_CLKDIV_HCLK_N_Msk)) | CLK_CLKDIV_HCLK(1);
 
     /* Set PLL to power down mode and PLL_STB bit in CLKSTATUS register will be cleared by hardware */
-    CLK->PLLCON |= CLK_PLLCON_PD_Msk;    
-    
+    CLK->PLLCON |= CLK_PLLCON_PD_Msk;
+
     /* Enable external XTAL 12MHz clock */
     CLK->PWRCON |= CLK_PWRCON_XTL12M_EN_Msk;
 
@@ -142,7 +142,7 @@ void SYS_Init(void)
 
     /* Select UART module clock source */
     CLK->CLKSEL1 = (CLK->CLKSEL1 & (~CLK_CLKSEL1_UART_S_Msk)) | CLK_CLKSEL1_UART_S_HXT;
-    
+
     /*---------------------------------------------------------------------------------------------------------*/
     /* Init I/O Multi-function                                                                                 */
     /*---------------------------------------------------------------------------------------------------------*/
@@ -216,7 +216,7 @@ int main(void)
 
     /* UART sample IrDA Slave function */
     IrDA_FunctionRxTest();
-    
+
     while(1);
 
 }

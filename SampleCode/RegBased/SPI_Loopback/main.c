@@ -54,7 +54,7 @@ int main(void)
     printf("     P1.5 MOSI <--> P1.6 MISO \n");
 
     printf("\nSPI0 Loopback test ");
-    
+
     u32Err = 0;
     for(u32TestCount = 0; u32TestCount < 0x1000; u32TestCount++)
     {
@@ -113,7 +113,7 @@ void SYS_Init(void)
     /*---------------------------------------------------------------------------------------------------------*/
     /* Init System Clock                                                                                       */
     /*---------------------------------------------------------------------------------------------------------*/
-    
+
     /* Enable external 12MHz XTAL */
     CLK->PWRCON |= CLK_PWRCON_XTL12M_EN_Msk;
 

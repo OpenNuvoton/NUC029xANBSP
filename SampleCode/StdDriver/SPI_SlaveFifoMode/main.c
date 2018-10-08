@@ -72,7 +72,7 @@ int main(void)
 
     /* Set TX FIFO threshold and enable FIFO mode. */
     SPI_EnableFIFO(SPI0, 4, 4);
-    
+
     /* Access TX and RX FIFO */
     while(u32RxDataCount < TEST_COUNT)
     {
@@ -129,7 +129,7 @@ void SYS_Init(void)
     /* Update System Core Clock */
     /* User can use SystemCoreClockUpdate() to calculate PllClock, SystemCoreClock and CyclesPerUs automatically. */
     SystemCoreClockUpdate();
-    
+
     /*---------------------------------------------------------------------------------------------------------*/
     /* Init I/O Multi-function                                                                                 */
     /*---------------------------------------------------------------------------------------------------------*/
