@@ -23,6 +23,7 @@ volatile uint32_t g_u32RxDataCount;
 void SYS_Init(void);
 void UART0_Init(void);
 void SPI_Init(void);
+extern char GetChar(void);
 
 /* ------------- */
 /* Main function */
@@ -69,7 +70,7 @@ int main(void)
     u32TxDataCount = 0;
     u32RxDataCount = 0;
     printf("Press any key if the master device configuration is ready.\n");
-    getchar();
+    GetChar();
     printf("\n");
 
     /* Access TX and RX FIFO */

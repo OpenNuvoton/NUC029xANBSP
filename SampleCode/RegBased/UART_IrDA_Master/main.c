@@ -114,7 +114,7 @@ void SYS_Init(void)
 
     /* Switch HCLK clock source to Internal RC and HCLK source divide 1 */
     CLK->CLKSEL0 = (CLK->CLKSEL0 & (~CLK_CLKSEL0_HCLK_S_Msk)) | CLK_CLKSEL0_HCLK_S_HIRC;
-    CLK->CLKDIV = (CLK->CLKDIV & (CLK_CLKDIV_HCLK_N_Msk)) | CLK_CLKDIV_HCLK(1);
+    CLK->CLKDIV =( CLK->CLKDIV & (~CLK_CLKDIV_HCLK_N_Msk)) | CLK_CLKDIV_HCLK(1);
 
     /* Set PLL to power down mode and PLL_STB bit in CLKSTATUS register will be cleared by hardware */
     CLK->PLLCON |= CLK_PLLCON_PD_Msk;
@@ -189,7 +189,7 @@ void UART1_Init()
 /* MAIN function                                                                                           */
 /*---------------------------------------------------------------------------------------------------------*/
 
-int main(void)
+int32_t main(void)
 {
 
     /* Unlock protected registers */
