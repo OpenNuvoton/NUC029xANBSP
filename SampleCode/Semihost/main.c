@@ -13,7 +13,6 @@
 #include <stdio.h>
 #include "NUC029xAN.h"
 
-extern char GetChar(void);
 # if defined (__GNUC__)
 extern void initialise_monitor_handles(void);
 #endif
@@ -47,7 +46,7 @@ int32_t main()
     while(1)
     {
         /* Get input character */
-        item = GetChar();
+        item = getchar();
 
         /* Print input character back */
         printf("%c\n", item);
