@@ -7,11 +7,12 @@
  * Copyright (C) 2019 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 #include "targetdev.h"
-#include "ISP_USER.h"
+#include "isp_user.h"
 
+/* the smallest of APROM size is 16K */
 uint32_t GetApromSize()
 {
-    uint32_t size = 0x11000, data;
+    uint32_t size = 0x4000, data;
     int result;
 
     do {
@@ -25,26 +26,10 @@ uint32_t GetApromSize()
     } while (1);
 }
 
-#define CONFIG0_DFEN                0x01
 void GetDataFlashInfo(uint32_t *addr, uint32_t *size)
 {
-    uint32_t uData;
-    *size = 0;
-    FMC_Read_User(Config0, &uData);
-
-    if ((uData & CONFIG0_DFEN) == 0) { //DFEN enable
-        FMC_Read_User(Config1, &uData);
-
-        if (uData > g_apromSize || (uData & 0x7FF)) { //avoid config1 value from error
-            uData = g_apromSize;
-        }
-
-        *addr = uData;
-        *size = g_apromSize - uData;
-    } else {
-        *addr = g_apromSize;
-        *size = 0;
-    }
+    *addr = 0x1F000;
+    *size = 4096;//4K
 }
 
 /*** (C) COPYRIGHT 2019 Nuvoton Technology Corp. ***/
