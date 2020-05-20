@@ -6,6 +6,7 @@
 ; * @brief    NUC029 Series Startup Source File for IAR Platform
 ; *
 ; * @note
+; * SPDX-License-Identifier: Apache-2.0
 ; * Copyright (C) 2011 Nuvoton Technology Corp. All rights reserved.
 ; *
 ; ******************************************************************************/

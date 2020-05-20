@@ -6,6 +6,7 @@
  * @brief    NUC029 Series Global Control and Clock Control Driver Header File
  *
  * @note
+ * SPDX-License-Identifier: Apache-2.0
  * Copyright (C) 2011 Nuvoton Technology Corp. All rights reserved.
  *
  ******************************************************************************/
