@@ -151,6 +151,9 @@ int main()
     /* Init system clock and multi-function I/O */
     SYS_Init();
 
+    /* Re-eanble interrupt because it may be disabled by ldrom_main.c */
+    __set_PRIMASK(0);
+
     /* Init UART */
     UART_Init();
 

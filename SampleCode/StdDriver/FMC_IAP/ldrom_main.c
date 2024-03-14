@@ -132,7 +132,11 @@ int main()
     PutString("\n\nChange VECMAP and branch to LDROM...\n");
     UART_WAIT_TX_EMPTY(UART0);
 
-    /* Mask all interrupt before changing VECMAP to avoid wrong interrupt handler fetched */
+    /*
+        Mask all interrupt before changing VECMAP to avoid wrong interrupt handler fetched
+
+        NOTE: Taget application which reset to must re-enable interrupt by __set_PRIMASK(0).
+    */
     __set_PRIMASK(1);
 
     /* Change VECMAP for booting to APROM */
