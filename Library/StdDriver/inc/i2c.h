@@ -45,11 +45,13 @@ extern "C"
 #define I2C_I2CON_SI                0x08UL /*!< I2CON setting for I2C control bits. It would set SI bit                   */
 #define I2C_I2CON_SI_AA             0x0CUL /*!< I2CON setting for I2C control bits. It would set SI and AA bits           */
 #define I2C_I2CON_STA               0x20UL /*!< I2CON setting for I2C control bits. It would set STA bit                  */
-#define I2C_I2CON_STO               0x10UL /*!< I2CON setting for I2C control bits. It would set STO bit                                    */
+#define I2C_I2CON_STO               0x10UL /*!< I2CON setting for I2C control bits. It would set STO bit                  */
 #define I2C_I2CON_AA                0x04UL /*!< I2CON setting for I2C control bits. It would set AA bit                   */
 
 #define I2C_GCMODE_ENABLE           1      /*!< Enable  I2C GC Mode                                                       */
 #define I2C_GCMODE_DISABLE          0      /*!< Disable I2C GC Mode                                                       */
+
+#define I2C_TIMEOUT                 SystemCoreClock /*!< I2C time-out counter (1 second time-out)                         */
 
 /*@}*/ /* end of group NUC029_I2C_EXPORTED_CONSTANTS */
 

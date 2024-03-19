@@ -38,7 +38,7 @@
   */
 void SYS_ClearResetSrc(uint32_t u32Src)
 {
-    SYS->RSTSRC |= u32Src;
+    SYS->RSTSRC = u32Src;
 }
 
 /**
@@ -93,6 +93,7 @@ uint32_t  SYS_ReadPDID(void)
   * @param      None
   * @return     None
   * @details    This function reset chip with chip reset.
+  *             The register write-protection function should be disabled before using this function.
   */
 void SYS_ResetChip(void)
 {
@@ -104,6 +105,7 @@ void SYS_ResetChip(void)
   * @param      None
   * @return     None
   * @details    This function reset CPU with CPU reset.
+  *             The register write-protection function should be disabled before using this function.
   */
 void SYS_ResetCPU(void)
 {
@@ -111,7 +113,7 @@ void SYS_ResetCPU(void)
 }
 
 /**
-  * @brief      Reset Module
+  * @brief      Reset selected module
   * @param[in]  u32ModuleIndex is module index. Including :
   *             - \ref EBI_RST
   *             - \ref HDIV_RST
@@ -133,6 +135,7 @@ void SYS_ResetCPU(void)
   *             - \ref ADC_RST
   * @return     None
   * @details    This function reset selected module.
+  *             The register write-protection function should be disabled before using this function.
   */
 void SYS_ResetModule(uint32_t u32ModuleIndex)
 {
@@ -156,13 +159,15 @@ void SYS_ResetModule(uint32_t u32ModuleIndex)
   * @return     None
   * @details    This function configure Brown-out detector function.
   *             It configure Brown-out detector reset or interrupt mode, enable Brown-out function and set Brown-out voltage level.
-  *
+  *             The register write-protection function should be disabled before using this function.
   */
 void SYS_EnableBOD(int32_t i32Mode, uint32_t u32BODLevel)
 {
-    SYS->BODCR |= SYS_BODCR_BOD_EN_Msk;
-    SYS->BODCR = (SYS->BODCR & ~SYS_BODCR_BOD_RSTEN_Msk) | i32Mode;
-    SYS->BODCR = (SYS->BODCR & ~SYS_BODCR_BOD_VL_Msk) | u32BODLevel;
+    /* Enable Brown-out Detector function */
+    /* Enable Brown-out interrupt or reset function */
+    /* Select Brown-out Detector threshold voltage */
+    SYS->BODCR = (SYS->BODCR & ~(SYS_BODCR_BOD_RSTEN_Msk|SYS_BODCR_BOD_VL_Msk)) |
+                 (i32Mode) | (u32BODLevel) | SYS_BODCR_BOD_EN_Msk;
 }
 
 /**
@@ -170,6 +175,7 @@ void SYS_EnableBOD(int32_t i32Mode, uint32_t u32BODLevel)
   * @param      None
   * @return     None
   * @details    This function disable Brown-out detector function.
+  *             The register write-protection function should be disabled before using this function.
   */
 void SYS_DisableBOD(void)
 {

@@ -41,11 +41,11 @@
 #define CLK_CLKSEL0_HCLK_S_HXT          0x00UL /*!< Setting HCLK clock source as HXT */
 #define CLK_CLKSEL0_HCLK_S_PLL          0x02UL /*!< Setting HCLK clock source as PLL */
 #define CLK_CLKSEL0_HCLK_S_LIRC         0x03UL /*!< Setting HCLK clock source as LIRC */
-#define CLK_CLKSEL0_HCLK_S_HIRC         0x07UL /*!< Setting HCLKclock source as HIRC */
+#define CLK_CLKSEL0_HCLK_S_HIRC         0x07UL /*!< Setting HCLK clock source as HIRC */
 #define CLK_CLKSEL0_STCLK_S_HXT         0x00UL /*!< Setting SysTick clock source as HXT */
 #define CLK_CLKSEL0_STCLK_S_HXT_DIV2    0x10UL /*!< Setting SysTick clock source as HXT/2 */
 #define CLK_CLKSEL0_STCLK_S_HCLK_DIV2   0x18UL /*!< Setting SysTick clock source as HCLK/2 */
-#define CLK_CLKSEL0_STCLK_S_HIRC_DIV2   0x38UL /*!< Setting SysTick clock source as internal HIRC/2 */
+#define CLK_CLKSEL0_STCLK_S_HIRC_DIV2   0x38UL /*!< Setting SysTick clock source as HIRC/2 */
 #define CLK_CLKSEL0_STCLK_S_HCLK        0x04UL /*!< Setting SysTick clock source as HCLK */
 
 
@@ -135,7 +135,11 @@
 #define CLK_PLLCON_NO_2          0x4000UL         /*!< For output divider is 2 */
 #define CLK_PLLCON_NO_4          0xC000UL         /*!< For output divider is 4 */
 
+#if (__HXT == 12000000)
 #define CLK_PLLCON_50MHz_HXT     (CLK_PLLCON_PLL_SRC_HXT  | CLK_PLLCON_NR(3)  | CLK_PLLCON_NF( 25) | CLK_PLLCON_NO_2) /*!< Predefined PLLCON setting for 50MHz PLL output with 12MHz X'tal */
+#else
+# error "The PLL pre-definitions are only valid when external crystal is 12MHz"
+#endif
 #define CLK_PLLCON_50MHz_HIRC    (CLK_PLLCON_PLL_SRC_HIRC | CLK_PLLCON_NR(13) | CLK_PLLCON_NF( 59) | CLK_PLLCON_NO_2) /*!< Predefined PLLCON setting for 50.1918MHz PLL output with 22.1184MHz IRC */
 
 
@@ -152,7 +156,7 @@
 #define MODULE_IP_EN_Pos(x)      (((x) >>0 ) & 0x1f)   /*!< Calculate APBCLK offset on MODULE index */
 #define MODULE_NoMsk             0x0                   /*!< Not mask on MODULE index */
 /*-------------------------------------------------------------------------------------------------------------------------------------------------*/
-/*                     APBCLK(31)|CLKSEL(30:29)|CLKSEL_Msk(28:25) |CLKSEL_Pos(24:20)|CLKDIV(19:18)|CLKDIV_Msk(17:10)|CLKDIV_Pos(9:5)|IP_EN_Pos(4:0)*/
+/*                  APBCLK(31:30)|CLKSEL(29:28)|CLKSEL_Msk(27:25)|CLKSEL_Pos(24:20)|CLKDIV(19:18)|CLKDIV_Msk(17:10)|CLKDIV_Pos(9:5)|IP_EN_Pos(4:0) */
 /*-------------------------------------------------------------------------------------------------------------------------------------------------*/
 #define ISP_MODULE     ((0UL<<30)          |(MODULE_NoMsk<<25)                   |(MODULE_NoMsk<<10)        |CLK_AHBCLK_ISP_EN_Pos )     /*!< ISP Module */
 #define EBI_MODULE     ((0UL<<30)          |(MODULE_NoMsk<<25)                   |(MODULE_NoMsk<<10)        |CLK_AHBCLK_EBI_EN_Pos )     /*!< EBI Module */
@@ -296,7 +300,6 @@ void CLK_EnableCKO(uint32_t u32ClkSrc, uint32_t u32ClkDiv, uint32_t u32ClkDivBy1
 void CLK_PowerDown(void);
 void CLK_Idle(void);
 uint32_t CLK_GetHXTFreq(void);
-uint32_t CLK_GetLXTFreq(void);
 uint32_t CLK_GetHCLKFreq(void);
 uint32_t CLK_GetPCLKFreq(void);
 uint32_t CLK_GetCPUFreq(void);

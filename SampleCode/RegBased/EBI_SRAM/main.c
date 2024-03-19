@@ -15,7 +15,7 @@
 #define PLL_CLOCK           50000000
 
 
-extern void SRAM_BS616LV4017(void);
+extern int32_t SRAM_BS616LV4017(void);
 
 
 void SYS_Init(void)
@@ -128,9 +128,9 @@ int main(void)
     printf("|    EBI SRAM Sample Code    |\n");
     printf("+----------------------------+\n\n");
 
-    printf("***************************************************************************\n");
+    printf("*****************************************************************************\n");
     printf("* Please connect BS616LV4017 to NUC029 Series EBI bus before EBI testing !! *\n");
-    printf("***************************************************************************\n\n");
+    printf("*****************************************************************************\n\n");
 
     /* Enable EBI function and bus width to 16-bit, MCLK is HCLK/2 */
     EBI->EBICON = (EBI_MCLKDIV_2 << EBI_EBICON_MCLKDIV_Pos) | EBI_EBICON_ExtBW16_Msk | EBI_EBICON_ExtEN_Msk |
@@ -138,15 +138,16 @@ int main(void)
     EBI->EXTIME = 0x03003318;
 
     /* Start SRAM test */
-    SRAM_BS616LV4017();
+    if( SRAM_BS616LV4017() == 0)
+    {
+        printf("*** SRAM Test OK ***\n");
+    }
 
     /* Disable EBI function */
     EBI->EBICON &= ~EBI_EBICON_ExtEN_Msk;
 
     /* Disable EBI clock */
     CLK->AHBCLK &= ~CLK_AHBCLK_EBI_EN_Msk;
-
-    printf("*** SRAM Test OK ***\n");
 
     while(1);
 }

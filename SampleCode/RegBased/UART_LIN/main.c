@@ -164,7 +164,7 @@ uint32_t GetCheckSumValue(uint8_t *pu8Buf, uint32_t u32ModeSel)
 /*---------------------------------------------------------------------------------------------------------*/
 void LIN_SendHeader(uint32_t u32id)
 {
-    uint32_t u32Count;
+    uint32_t u32Count, u32TimeOutCnt;
 
     g_i32pointer = 0;
 
@@ -172,7 +172,7 @@ void LIN_SendHeader(uint32_t u32id)
     UART1->FUN_SEL = UART_FUNC_SEL_LIN;
 
     /* Set LIN operation mode, Tx mode and break field length is 12 bits */
-    UART1->ALT_CSR &= ~(UART_ALT_CSR_LIN_TX_EN_Msk | UART_ALT_CSR_LIN_TX_EN_Msk | UART_ALT_CSR_UA_LIN_BKFL_Msk);
+    UART1->ALT_CSR &= ~(UART_ALT_CSR_LIN_RX_EN_Msk | UART_ALT_CSR_LIN_TX_EN_Msk | UART_ALT_CSR_UA_LIN_BKFL_Msk);
     UART1->ALT_CSR |= (UART_ALT_CSR_LIN_TX_EN_Msk | (11 << UART_ALT_CSR_UA_LIN_BKFL_Pos));
 
     g_u8SendData[g_i32pointer++] = 0x55 ;                   // SYNC Field
@@ -180,7 +180,15 @@ void LIN_SendHeader(uint32_t u32id)
 
     for(u32Count = 0; u32Count < 2; u32Count++)
     {
-        while(!(UART1->FSR & UART_FSR_TE_FLAG_Msk));   /* Wait Tx empty */
+        u32TimeOutCnt = SystemCoreClock; /* 1 second time-out */
+        while(!(UART1->FSR & UART_FSR_TE_FLAG_Msk))    /* Wait Tx empty */
+        {
+            if(--u32TimeOutCnt == 0)
+            {
+                printf("Wait for UART Tx empty time-out!\n");
+                return;
+            }
+        }
 
         UART1->THR = g_u8SendData[u32Count]; /* Send UART Data from buffer */
     }
@@ -193,6 +201,7 @@ void LIN_SendHeader(uint32_t u32id)
 void LIN_SendResponse(int32_t checkSumOption, uint32_t *pu32TxBuf)
 {
     int32_t i32;
+    uint32_t u32TimeOutCnt;
 
     for(i32 = 0; i32 < 8; i32++)
         g_u8SendData[g_i32pointer++] = pu32TxBuf[i32] ;
@@ -201,7 +210,15 @@ void LIN_SendResponse(int32_t checkSumOption, uint32_t *pu32TxBuf)
 
     for(i32 = 0; i32 < 9; i32++)
     {
-        while(!(UART1->FSR & UART_FSR_TE_FLAG_Msk));   /* Wait Tx empty */
+        u32TimeOutCnt = SystemCoreClock; /* 1 second time-out */
+        while(!(UART1->FSR & UART_FSR_TE_FLAG_Msk))    /* Wait Tx empty */
+        {
+            if(--u32TimeOutCnt == 0)
+            {
+                printf("Wait for UART Tx empty time-out!\n");
+                return;
+            }
+        }
 
         UART1->THR = g_u8SendData[i32 + 2]; /* Send UART Data from buffer */
     }
@@ -264,7 +281,7 @@ void SYS_Init(void)
 
 }
 
-void UART0_Init()
+void UART0_Init(void)
 {
     /*---------------------------------------------------------------------------------------------------------*/
     /* Init UART                                                                                               */
@@ -278,7 +295,7 @@ void UART0_Init()
     UART0->LCR = UART_WORD_LEN_8 | UART_PARITY_NONE | UART_STOP_BIT_1;
 }
 
-void UART1_Init()
+void UART1_Init(void)
 {
     /*---------------------------------------------------------------------------------------------------------*/
     /* Init UART                                                                                               */

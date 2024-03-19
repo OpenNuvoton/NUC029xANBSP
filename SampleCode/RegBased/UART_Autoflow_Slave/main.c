@@ -182,7 +182,7 @@ void UART1_IRQHandler(void)
 /*---------------------------------------------------------------------------------------------------------*/
 void AutoFlow_FunctionRxTest()
 {
-    uint32_t u32i;
+    uint32_t u32i, u32Err = 0;
 
     printf("\n");
     printf("+-----------------------------------------------------------+\n");
@@ -203,7 +203,7 @@ void AutoFlow_FunctionRxTest()
     printf("|  Description :                                            |\n");
     printf("|    The sample code needs two boards. One is Master and    |\n");
     printf("|    the other is slave. Master will send 1k bytes data     |\n");
-    printf("|    to slave.Slave will check if received data is correct  |\n");
+    printf("|    to slave. Slave will check if received data is correct |\n");
     printf("|    after getting 1k bytes data.                           |\n");
     printf("|    Press any key to start...                              |\n");
     printf("+-----------------------------------------------------------+\n");
@@ -225,7 +225,7 @@ void AutoFlow_FunctionRxTest()
     UART1->FCR = (UART1->FCR & (~UART_FCR_RFITL_Msk)) | UART_FCR_RFITL_8BYTES;
 
     /* Set Timeout time 0x3E bit-time and time-out counter enable */
-    UART1->TOR = (UART1->TOR & ~UART_TOR_TOIC_Msk) | (0x3E);
+    UART1->TOR = (UART1->TOR & (~UART_TOR_TOIC_Msk)) | (0x3E);
     UART1->IER |= UART_IER_TIME_OUT_EN_Msk;
 
     /* Enable UART1 IRQ */
@@ -241,11 +241,15 @@ void AutoFlow_FunctionRxTest()
     {
         if(g_u8RecData[u32i] != (u32i & 0xFF))
         {
-            printf("Compare Data Failed\n");
-            while(1);
+            u32Err = 1;
+            break;
         }
     }
-    printf("\n Receive OK & Check OK\n");
+
+    if( u32Err )
+        printf("Compare Data Failed\n");
+    else
+        printf("\n Receive OK & Check OK\n");
 
     /* Disable UART1 IRQ */
     NVIC_DisableIRQ(UART1_IRQn);

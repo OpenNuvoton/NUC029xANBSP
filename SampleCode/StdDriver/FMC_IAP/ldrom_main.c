@@ -3,7 +3,7 @@
  * @version  V1.00
  * $Revision: 1 $
  * $Date: 14/10/01 10:34a $
- * @brief    FMC LDROM IAP sample program for MINI51 series MCU
+ * @brief    FMC LDROM IAP sample program for NUC029 series MCU
  *
  * @note
  * Copyright (C) 2013 Nuvoton Technology Corp. All rights reserved.
@@ -41,11 +41,11 @@ void SYS_Init(void)
     CLK->CLKSEL1 = CLK_CLKSEL1_UART_S_HXT;
 
     /* Update System Core Clock */
-    /* User can use SystemCoreClockUpdate() to calculate PllClock, SystemCoreClock and CycylesPerUs automatically. */
+    /* User can use SystemCoreClockUpdate() to calculate PllClock, SystemCoreClock and CyclesPerUs automatically. */
     //SystemCoreClockUpdate();
     PllClock        = PLL_CLOCK;            // PLL
     SystemCoreClock = PLL_CLOCK / 1;        // HCLK
-    CyclesPerUs     = PLL_CLOCK / 1000000;  // For SYS_SysTickDelay()
+    CyclesPerUs     = PLL_CLOCK / 1000000;  // For CLK_SysTickDelay()
 
     /*---------------------------------------------------------------------------------------------------------*/
     /* Init I/O Multi-function                                                                                 */
@@ -114,6 +114,8 @@ static void PutString(char *str)
 int main()
 {
     FUNC_PTR    *ResetFunc;
+    uint32_t u32TimeOutCnt;
+
     /* Unlock protected register */
     SYS_UnlockReg();
 
@@ -129,8 +131,10 @@ int main()
     PutString("\n\nPress any key to branch to APROM...\n");
     GetChar();
 
-    PutString("\n\nChange VECMAP and branch to LDROM...\n");
-    UART_WAIT_TX_EMPTY(UART0);
+    PutString("\n\nChange VECMAP and branch to APROM...\n");
+    u32TimeOutCnt = SystemCoreClock; /* 1 second time-out */
+    UART_WAIT_TX_EMPTY(UART0)
+        if(--u32TimeOutCnt == 0) break;
 
     /*
         Mask all interrupt before changing VECMAP to avoid wrong interrupt handler fetched

@@ -36,7 +36,7 @@ void IrDA_FunctionTxTest()
     printf("+-----------------------------------------------------------+\n");
     printf("|     ______                                    _______     |\n");
     printf("|    |      |                                  |       |    |\n");
-    printf("|    |Master|---TXD1(P1.3) <====> RXD1(P1.2)---|Slave  |    |\n");
+    printf("|    |Master|---TXD1(P1.3)        RXD1(P1.2)---|Slave  |    |\n");
     printf("|    |      |                                  |       |    |\n");
     printf("|    |______|                                  |_______|    |\n");
     printf("|                                                           |\n");
@@ -57,8 +57,8 @@ void IrDA_FunctionTxTest()
         UART0 is set to debug port and connect with PC firstly.
         The IrDA sample code needs two module board to execute.
         Set the master board is IrDA TX Mode and the other is IrDA Rx mode.
-        Inputing char on terminal will be sent to the UART0 of master.
-        After the master receiving, the inputing char will send to UART0 again.
+        Inputting char on terminal will be sent to the UART0 of master.
+        After the master receiving, the inputting char will send to UART0 again.
         At the same time, it also sends to UART1 TX pin by IrDA mode.
         Slave will print received char after UART1 send out.
         Note that IrDA mode is ONLY used when baud rate equation is selected mode 0.
@@ -74,7 +74,7 @@ void IrDA_FunctionTxTest()
     printf("| 3). Return step 1. (Press '0' to exit)                    |\n");
     printf("+-----------------------------------------------------------+\n");
 
-    printf("\nIRDA Sample Code Start. \n");
+    printf("\nIrDA Sample Code Start. \n");
 
     /* Set IrDA Tx Mode, Baud Rate configuration must be used MODE0 */
     UART_SelectIrDAMode(UART1, 57600, UART_IRCR_TX_SELECT);

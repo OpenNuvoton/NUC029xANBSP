@@ -41,7 +41,7 @@
   *                                 - \ref WDT_RESET_DELAY_130CLK
   *                                 - \ref WDT_RESET_DELAY_18CLK
   *                                 - \ref WDT_RESET_DELAY_3CLK
-  * @param[in]  u32EnableReset      Enable WDT time-out rest system function. Valid values are TRUE and FALSE.
+  * @param[in]  u32EnableReset      Enable WDT time-out reset system function. Valid values are TRUE and FALSE.
   * @param[in]  u32EnableWakeup     Enable WDT time-out wake-up system function. Valid values are TRUE and FALSE.
   *
   * @return     None

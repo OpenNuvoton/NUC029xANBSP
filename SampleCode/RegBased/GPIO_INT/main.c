@@ -122,7 +122,7 @@ void SYS_Init(void)
 
 }
 
-void UART0_Init()
+void UART0_Init(void)
 {
     /*---------------------------------------------------------------------------------------------------------*/
     /* Init UART                                                                                               */
@@ -139,7 +139,7 @@ void UART0_Init()
 /*---------------------------------------------------------------------------------------------------------*/
 /* MAIN function                                                                                           */
 /*---------------------------------------------------------------------------------------------------------*/
-int main(void)
+int32_t main(void)
 {
     /* Unlock protected registers */
     SYS_UnlockReg();
@@ -170,7 +170,7 @@ int main(void)
     NVIC_EnableIRQ(GPIO_P0P1_IRQn);
 
     /* Configure P4.5 as Quasi-bidirection mode and enable interrupt by falling edge trigger */
-    P4->PMD = (P1->PMD & (~GPIO_PMD_PMD5_Msk)) | (GPIO_PMD_QUASI << GPIO_PMD_PMD5_Pos);
+    P4->PMD = (P4->PMD & (~GPIO_PMD_PMD5_Msk)) | (GPIO_PMD_QUASI << GPIO_PMD_PMD5_Pos);
     P4->IMD |= (GPIO_IMD_EDGE << 5);
     P4->IEN |= (BIT5 << GPIO_IEN_IF_EN_Pos);
     NVIC_EnableIRQ(GPIO_P2P3P4_IRQn);

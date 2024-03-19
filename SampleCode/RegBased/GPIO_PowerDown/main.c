@@ -21,10 +21,15 @@
 /*---------------------------------------------------------------------------------------------------------*/
 void PowerDownFunction(void)
 {
+    uint32_t u32TimeOutCnt;
+
+    /* Unlock protected registers */
     SYS_UnlockReg();
 
     /* To check if all the debug messages are finished */
-    while(!(UART0->FSR & UART_FSR_TE_FLAG_Msk));
+    u32TimeOutCnt = SystemCoreClock; /* 1 second time-out */
+    while(!(UART0->FSR & UART_FSR_TE_FLAG_Msk))
+        if(--u32TimeOutCnt == 0) break;
 
     SCB->SCR = 4;
 
@@ -54,7 +59,7 @@ void GPIOP0P1_IRQHandler(void)
     }
     else
     {
-        /* Un-expected interrupt. Just clear all PORT0, PORT1 interrupts */
+        /* Un-expected interrupt. Just clear all PORT0 and PORT1 interrupts */
         P0->ISRC = P0->ISRC;
         P1->ISRC = P1->ISRC;
         printf("Un-expected interrupts.\n");
@@ -111,7 +116,7 @@ void SYS_Init(void)
 
 }
 
-void UART0_Init()
+void UART0_Init(void)
 {
     /*---------------------------------------------------------------------------------------------------------*/
     /* Init UART                                                                                               */
@@ -128,7 +133,7 @@ void UART0_Init()
 /*---------------------------------------------------------------------------------------------------------*/
 /* MAIN function                                                                                           */
 /*---------------------------------------------------------------------------------------------------------*/
-int main(void)
+int32_t main(void)
 {
     /* Unlock protected registers */
     SYS_UnlockReg();
@@ -155,7 +160,7 @@ int main(void)
     {
         printf("Enter to Power-Down ......\n");
         PowerDownFunction();
-        while(UART0->FSR & UART_FSR_TE_FLAG_Msk);
+
         printf("System waken-up done.\n\n");
     }
 

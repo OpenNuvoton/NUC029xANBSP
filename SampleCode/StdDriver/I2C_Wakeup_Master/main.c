@@ -12,7 +12,6 @@
 #include <stdio.h>
 #include "NUC029xAN.h"
 
-#define PLLCON_SETTING      SYSCLK_PLLCON_50MHz_XTAL
 #define PLL_CLOCK           50000000
 
 /*---------------------------------------------------------------------------------------------------------*/
@@ -51,7 +50,7 @@ void I2C0_IRQHandler(void)
 }
 
 /*---------------------------------------------------------------------------------------------------------*/
-/*  I2C Master Tx Wake Up Callback Function                                                                        */
+/*  I2C Master Tx Wake Up Callback Function                                                                */
 /*---------------------------------------------------------------------------------------------------------*/
 void I2C_MasterTxWakeup(uint32_t u32Status)
 {
@@ -257,7 +256,7 @@ void I2C0_Close(void)
 
 int32_t I2C0_Read_Write_SLAVE(uint8_t slvaddr)
 {
-    uint32_t i;
+    uint32_t i, u32TimeOutCnt;
 
     g_u8DeviceAddr = slvaddr;
 
@@ -277,7 +276,15 @@ int32_t I2C0_Read_Write_SLAVE(uint8_t slvaddr)
         I2C_SET_CONTROL_REG(I2C0, I2C_I2CON_STA);
 
         /* Wait I2C Tx Finish */
-        while(g_u8MstEndFlag == 0);
+        u32TimeOutCnt = I2C_TIMEOUT;
+        while(g_u8MstEndFlag == 0)
+        {
+            if(--u32TimeOutCnt == 0)
+            {
+                printf("Wait for I2C Tx finish time-out!\n\n");
+                return -1;
+            }
+        }
         g_u8MstEndFlag = 0;
 
         /* I2C function to read data from slave */
@@ -289,7 +296,15 @@ int32_t I2C0_Read_Write_SLAVE(uint8_t slvaddr)
         I2C_SET_CONTROL_REG(I2C0, I2C_I2CON_STA);
 
         /* Wait I2C Rx Finish */
-        while(g_u8MstEndFlag == 0);
+        u32TimeOutCnt = I2C_TIMEOUT;
+        while(g_u8MstEndFlag == 0)
+        {
+            if(--u32TimeOutCnt == 0)
+            {
+                printf("Wait for I2C Rx finish time-out!\n\n");
+                return -1;
+            }
+        }
 
         /* Compare data */
         if(g_u8MstRxData != g_au8MstTxData[2])
@@ -307,6 +322,8 @@ int32_t I2C0_Read_Write_SLAVE(uint8_t slvaddr)
 /*---------------------------------------------------------------------------------------------------------*/
 int32_t main(void)
 {
+    uint32_t u32TimeOutCnt;
+
     /* Unlock protected registers */
     SYS_UnlockReg();
 
@@ -350,7 +367,15 @@ int32_t main(void)
 
     /* Send a START condition to bus */
     I2C_SET_CONTROL_REG(I2C0, I2C_I2CON_STA);
-    while(g_u8MstEndFlag == 0);
+    u32TimeOutCnt = I2C_TIMEOUT;
+    while(g_u8MstEndFlag == 0)
+    {
+        if(--u32TimeOutCnt == 0)
+        {
+            printf("Wait for I2C time-out!\n\n");
+            goto lexit;
+        }
+    }
 
     /*Access to the corresponding address Slave*/
     printf("\n");
@@ -371,10 +396,12 @@ int32_t main(void)
     I2C0_Read_Write_SLAVE(0x75 & ~0x04);
     printf("SLAVE Address Mask test OK.\n");
 
+lexit:
+
     s_I2C0HandlerFn = NULL;
 
     /* Close I2C0 */
     I2C0_Close();
 
-    return 0;
+    while(1);
 }

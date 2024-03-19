@@ -12,7 +12,6 @@
 #include <stdio.h>
 #include "NUC029xAN.h"
 
-#define PLLCON_SETTING      SYSCLK_PLLCON_50MHz_XTAL
 #define PLL_CLOCK           50000000
 
 uint32_t slave_buff_addr;
@@ -61,7 +60,7 @@ void I2C0_IRQHandler(void)
     }
 }
 /*---------------------------------------------------------------------------------------------------------*/
-/*  Power Wake-up IRQ Handler                                                                                       */
+/*  Power Wake-up IRQ Handler                                                                              */
 /*---------------------------------------------------------------------------------------------------------*/
 void PWRWU_IRQHandler(void)
 {
@@ -76,7 +75,7 @@ void PWRWU_IRQHandler(void)
 }
 
 /*---------------------------------------------------------------------------------------------------------*/
-/*  I2C Slave Transmit/Receive Callback Function                                                                               */
+/*  I2C Slave Transmit/Receive Callback Function                                                           */
 /*---------------------------------------------------------------------------------------------------------*/
 void I2C_SlaveTRx(uint32_t u32Status)
 {
@@ -229,7 +228,7 @@ void I2C0_Close(void)
 /*---------------------------------------------------------------------------------------------------------*/
 int32_t main(void)
 {
-    uint32_t i;
+    uint32_t i, u32TimeOutCnt;
 
     /* Unlock protected registers */
     SYS_UnlockReg();
@@ -294,8 +293,11 @@ int32_t main(void)
     printf("Enter PD 0x%x 0x%x\n", I2C0->I2CON, I2C0->I2CSTATUS);
     printf("\n");
     printf("CHIP enter power down status.\n");
-    /* Waiting for UART printf finish*/
-    while(((UART0->FSR) & UART_FSR_TE_FLAG_Msk) == 0);
+
+    /* Waiting for UART printf finish */
+    u32TimeOutCnt = SystemCoreClock; /* 1 second time-out */
+    while(((UART0->FSR) & UART_FSR_TE_FLAG_Msk) == 0)
+        if(--u32TimeOutCnt == 0) break;
 
     if(((I2C0->I2CON)&I2C_I2CON_SI_Msk) != 0)
     {

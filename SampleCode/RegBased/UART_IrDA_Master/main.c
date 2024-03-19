@@ -37,7 +37,7 @@ void IrDA_FunctionTxTest()
     printf("+-----------------------------------------------------------+\n");
     printf("|     ______                                    _______     |\n");
     printf("|    |      |                                  |       |    |\n");
-    printf("|    |Master|---TXD1(P1.3) <====> RXD1(P1.2)---|Slave  |    |\n");
+    printf("|    |Master|---TXD1(P1.3)        RXD1(P1.2)---|Slave  |    |\n");
     printf("|    |      |                                  |       |    |\n");
     printf("|    |______|                                  |_______|    |\n");
     printf("|                                                           |\n");
@@ -58,8 +58,8 @@ void IrDA_FunctionTxTest()
         UART0 is set to debug port and connect with PC firstly.
         The IrDA sample code needs two module board to execute.
         Set the master board is IrDA TX Mode and the other is IrDA Rx mode.
-        Inputing char on terminal will be sent to the UART0 of master.
-        After the master receiving, the inputing char will send to UART0 again.
+        Inputting char on terminal will be sent to the UART0 of master.
+        After the master receiving, the inputting char will send to UART0 again.
         At the same time, it also sends to UART1 TX pin by IrDA mode.
         Slave will print received char after UART1 send out.
         Note that IrDA mode is ONLY used when baud rate equation is selected mode 0.
@@ -114,7 +114,7 @@ void SYS_Init(void)
 
     /* Switch HCLK clock source to Internal RC and HCLK source divide 1 */
     CLK->CLKSEL0 = (CLK->CLKSEL0 & (~CLK_CLKSEL0_HCLK_S_Msk)) | CLK_CLKSEL0_HCLK_S_HIRC;
-    CLK->CLKDIV =( CLK->CLKDIV & (~CLK_CLKDIV_HCLK_N_Msk)) | CLK_CLKDIV_HCLK(1);
+    CLK->CLKDIV = (CLK->CLKDIV & (~CLK_CLKDIV_HCLK_N_Msk)) | CLK_CLKDIV_HCLK(1);
 
     /* Set PLL to power down mode and PLL_STB bit in CLKSTATUS register will be cleared by hardware */
     CLK->PLLCON |= CLK_PLLCON_PD_Msk;

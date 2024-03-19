@@ -86,7 +86,7 @@ void SYS_Init(void)
 
 }
 
-void UART0_Init()
+void UART0_Init(void)
 {
     /*---------------------------------------------------------------------------------------------------------*/
     /* Init UART                                                                                               */
@@ -100,7 +100,7 @@ void UART0_Init()
     UART0->LCR = UART_WORD_LEN_8 | UART_PARITY_NONE | UART_STOP_BIT_1;
 }
 
-void UART1_Init()
+void UART1_Init(void)
 {
     /*---------------------------------------------------------------------------------------------------------*/
     /* Init UART                                                                                               */
@@ -152,7 +152,7 @@ int32_t main(void)
 }
 
 /*---------------------------------------------------------------------------------------------------------*/
-/*  AutoFlow Function Tx Test                                                                                 */
+/*  AutoFlow Function Tx Test                                                                              */
 /*---------------------------------------------------------------------------------------------------------*/
 void AutoFlow_FunctionTxTest()
 {
@@ -177,7 +177,7 @@ void AutoFlow_FunctionTxTest()
     printf("|  Description :                                            |\n");
     printf("|    The sample code needs two boards. One is Master and    |\n");
     printf("|    the other is slave. Master will send 1k bytes data     |\n");
-    printf("|    to slave.Slave will check if received data is correct  |\n");
+    printf("|    to slave. Slave will check if received data is correct |\n");
     printf("|    after getting 1k bytes data.                           |\n");
     printf("|    Press any key to start...                              |\n");
     printf("+-----------------------------------------------------------+\n");

@@ -15,7 +15,6 @@
 #define PLLCON_SETTING  CLK_PLLCON_50MHz_HXT
 #define PLL_CLOCK           50000000
 
-#define PLL_CLOCK           50000000
 # if defined ( __GNUC__ )
 #define RXBUFSIZE 128
 #else
@@ -98,27 +97,13 @@ void UART0_Init()
     /*---------------------------------------------------------------------------------------------------------*/
     /* Init UART                                                                                               */
     /*---------------------------------------------------------------------------------------------------------*/
-    /* Reset UART1 */
+    /* Reset UART0 */
     SYS->IPRSTC2 |=  SYS_IPRSTC2_UART0_RST_Msk;
     SYS->IPRSTC2 &= ~SYS_IPRSTC2_UART0_RST_Msk;
 
     /* Configure UART0 and set UART0 Baudrate */
     UART0->BAUD = UART_BAUD_MODE2 | UART_BAUD_MODE2_DIVIDER(__HXT, 115200);
     UART0->LCR = UART_WORD_LEN_8 | UART_PARITY_NONE | UART_STOP_BIT_1;
-}
-
-void UART1_Init()
-{
-    /*---------------------------------------------------------------------------------------------------------*/
-    /* Init UART                                                                                               */
-    /*---------------------------------------------------------------------------------------------------------*/
-    /* Reset UART0 */
-    SYS->IPRSTC2 |=  SYS_IPRSTC2_UART1_RST_Msk;
-    SYS->IPRSTC2 &= ~SYS_IPRSTC2_UART1_RST_Msk;
-
-    /* Configure UART1 and set UART1 Baudrate */
-    UART1->BAUD = UART_BAUD_MODE2 | UART_BAUD_MODE2_DIVIDER(__HXT, 115200);
-    UART1->LCR = UART_WORD_LEN_8 | UART_PARITY_NONE | UART_STOP_BIT_1;
 }
 
 /*---------------------------------------------------------------------------------------------------------*/
@@ -176,6 +161,7 @@ void UART_TEST_HANDLE()
     uint8_t u8InChar = 0xFF;
     uint32_t u32IntSts = UART0->ISR;
 
+    /* Receive Data Available Interrupt Handle */
     if(u32IntSts & UART_ISR_RDA_INT_Msk)
     {
         printf("\nInput:");
@@ -205,6 +191,7 @@ void UART_TEST_HANDLE()
         printf("\nTransmission Test:");
     }
 
+    /* Transmit Holding Register Empty Interrupt Handle */
     if(u32IntSts & UART_ISR_THRE_INT_Msk)
     {
         uint16_t tmp;
@@ -236,7 +223,7 @@ void UART_FunctionTest()
     /*
         Using a RS232 cable to connect UART0 and PC.
         UART0 is set to debug port. UART0 is enable RDA and RLS interrupt.
-        When inputing char to terminal screen, RDA interrupt will happen and
+        When inputting char to terminal screen, RDA interrupt will happen and
         UART0 will print the received char on screen.
     */
 

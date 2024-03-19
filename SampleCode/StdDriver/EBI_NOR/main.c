@@ -93,7 +93,7 @@ void SYS_Init(void)
     CLK->CLKSEL1 = CLK_CLKSEL1_UART_S_PLL;
 
     /* Update System Core Clock */
-    /* User can use SystemCoreClockUpdate() to calculate PllClock, SystemCoreClock and CycylesPerUs automatically. */
+    /* User can use SystemCoreClockUpdate() to calculate PllClock, SystemCoreClock and CyclesPerUs automatically. */
     SystemCoreClockUpdate();
 
     /*---------------------------------------------------------------------------------------------------------*/
@@ -162,9 +162,9 @@ int main(void)
     printf("|    EBI NOR Flash Sample Code    |\n");
     printf("+---------------------------------+\n\n");
 
-    printf("************************************************************************\n");
+    printf("**************************************************************************\n");
     printf("* Please connect W39L040P to NUC029 Series EBI bus before EBI testing !! *\n");
-    printf("************************************************************************\n\n");
+    printf("**************************************************************************\n\n");
 
     /* Enable EBI function and bus width to 8-bit */
     EBI_Open(0, EBI_BUSWIDTH_8BIT, EBI_TIMING_NORMAL, 0, 0);
@@ -179,7 +179,7 @@ int main(void)
     else
     {
         printf("NOR W39L040P initial fail ! (ID:0x%X)\n\n", u32NORIDInfo);
-        while(1);
+        goto lexit;
     }
 
     /* Erase flash */
@@ -190,13 +190,18 @@ int main(void)
         if(u8ReadOutData != 0xFF)
         {
             printf("    >> Chip Erase Fail !! Addr:0x%X, Data:0x%X.\n\n", u32i, u8ReadOutData);
-            while(1);
+            goto lexit;
         }
     }
     printf("    >> Chip Erase OK !!!\n");
 
     /* Start to program NOR flash test */
-    ProgramContinueDataTest();
+    if( ProgramContinueDataTest() == TRUE )
+    {
+        printf("*** NOR Flash Test OK ***\n");
+    }
+
+lexit:
 
     /* Disable EBI function */
     EBI_Close(0);
