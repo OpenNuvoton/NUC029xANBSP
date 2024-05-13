@@ -4,7 +4,8 @@
  * @version  0x32
  *
  * @note
- * Copyright (C) 2019 Nuvoton Technology Corp. All rights reserved.
+ * @copyright SPDX-License-Identifier: Apache-2.0
+ * @copyright Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 #ifndef ISP_USER_H
 #define ISP_USER_H
@@ -38,10 +39,10 @@ extern uint32_t GetApromSize(void);
 // isp_user.c
 extern int ParseCmd(unsigned char *buffer, uint8_t len);
 extern uint32_t g_apromSize, g_dataFlashAddr, g_dataFlashSize;
-extern __align(4) uint8_t response_buff[64];
+extern __attribute__((aligned(4))) uint8_t response_buff[64];
 extern volatile uint8_t bISPDataReady;
 
-extern __align(4) uint8_t usb_rcvbuf[];
+extern __attribute__((aligned(4))) uint8_t usb_rcvbuf[];
 
 #endif	// #ifndef ISP_USER_H
 

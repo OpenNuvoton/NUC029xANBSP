@@ -6,9 +6,9 @@
  * @brief    NUC029 Series Peripheral Access Layer Header File
  *
  * @note
- * SPDX-License-Identifier: Apache-2.0
- * Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
+ * @copyright SPDX-License-Identifier: Apache-2.0
  *
+ * @copyright Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 
 /**
@@ -6310,5 +6310,4 @@ typedef volatile unsigned short vu16;
 #include "acmp.h"
 #endif
 
-/* Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved. */
 

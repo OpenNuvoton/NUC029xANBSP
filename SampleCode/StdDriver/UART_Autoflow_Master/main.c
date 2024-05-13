@@ -6,8 +6,9 @@
  * @brief    NUC029 Series UART Interface Controller Driver Sample Code
  *
  * @note
- * Copyright (C) 2011 Nuvoton Technology Corp. All rights reserved.
+ * @copyright SPDX-License-Identifier: Apache-2.0
  *
+ * @copyright Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 #include <stdio.h>
 #include "NUC029xAN.h"
@@ -71,7 +72,7 @@ void SYS_Init(void)
     SYS->P1_MFP |= (SYS_MFP_P12_RXD1 | SYS_MFP_P13_TXD1);
 
     /* Set P0 multi-function pins for UART1 CTS */
-    SYS->P0_MFP = SYS->P0_MFP & (~SYS_MFP_P00_Msk) | SYS_MFP_P00_CTS1;
+    SYS->P0_MFP = (SYS->P0_MFP & (~SYS_MFP_P00_Msk)) | SYS_MFP_P00_CTS1;
 
 }
 

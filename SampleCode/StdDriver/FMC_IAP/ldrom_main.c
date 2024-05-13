@@ -6,16 +6,21 @@
  * @brief    FMC LDROM IAP sample program for NUC029 series MCU
  *
  * @note
- * Copyright (C) 2013 Nuvoton Technology Corp. All rights reserved.
+ * @copyright SPDX-License-Identifier: Apache-2.0
+ * @copyright Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
 *****************************************************************************/
 #include <stdio.h>
 #include "NUC029xAN.h"
 
 
+#ifdef __GNUC__
+#define printf(...)
+#endif
 
 #define PLLCON_SETTING      CLK_PLLCON_50MHz_HXT
 #define PLL_CLOCK           50000000
 typedef void (FUNC_PTR)(void);
+void ProcessHardFault(void){}
 
 void SYS_Init(void)
 {

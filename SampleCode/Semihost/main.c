@@ -6,17 +6,21 @@
 * @brief    NUC029 Series Semihost Sample Code
 *
 * @note
-* Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
+ * @copyright SPDX-License-Identifier: Apache-2.0
 *
+ * @copyright Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
 ******************************************************************************/
 
 #include <stdio.h>
 #include "NUC029xAN.h"
+#if (defined (__GNUC__) && (!(defined(__ARMCC_VERSION))))
 
-# if defined (__GNUC__)
 extern void initialise_monitor_handles(void);
 #endif
 
+
+void ProcessHardFault(void);
+void ProcessHardFault(void){}
 /*---------------------------------------------------------------------------------------------------------*/
 /* Main Function                                                                                           */
 /*---------------------------------------------------------------------------------------------------------*/
@@ -24,7 +28,9 @@ extern void initialise_monitor_handles(void);
 int32_t main()
 {
     int8_t item;
-
+#if (defined (__GNUC__) && (!(defined(__ARMCC_VERSION))))
+   initialise_monitor_handles();
+#endif
     /*
         To enable semihost, user must define "DEBUG_ENABLE_SEMIHOST" constant when build code with NUC029xAN BSP.
         This sample code is used to show how to print message/getchar on IDE debug environment.
@@ -37,9 +43,6 @@ int32_t main()
         NOTE2: Semihost only works with Nuvoton NuLink ICE Dongle in debug mode.
         NOTE3: It does not print any message if Nuvoton NuLink ICE Dongle is not connected.
     */
-#if (defined (__GNUC__) && (!(defined(__ARMCC_VERSION))))
-    initialise_monitor_handles();
-#endif
 
     printf("\n Start SEMIHOST test: \n");
 
