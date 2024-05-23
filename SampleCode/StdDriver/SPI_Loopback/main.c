@@ -5,7 +5,7 @@
  *           SPI1 will be configured as Master mode and SPI0 will be configured as Slave mode.
  *
  * @copyright SPDX-License-Identifier: Apache-2.0
- * @copyright Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
+ * @copyright Copyright (C) 2023 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 #include <stdio.h>
 #include "NUC029xAN.h"
@@ -266,16 +266,18 @@ void SYS_Init(void)
 
 #if (TwoPortLoopback)
     /* Setup SPI0 multi-function pins */
-    SYS->P1_MFP = SYS_MFP_P15_MOSI_0 | SYS_MFP_P16_MISO_0 | SYS_MFP_P17_SPICLK0;
+    SYS->P1_MFP &= ~(SYS_MFP_P14_Msk | SYS_MFP_P15_Msk | SYS_MFP_P16_Msk | SYS_MFP_P17_Msk);
+    SYS->P1_MFP |= (SYS_MFP_P15_MOSI_0 | SYS_MFP_P16_MISO_0 | SYS_MFP_P17_SPICLK0);
 #if (!Slave3WireMode)
-    SYS->P1_MFP = SYS_MFP_P14_SPISS0;
+    SYS->P1_MFP |= SYS_MFP_P14_SPISS0;
 #endif
 #endif
 
     /* Setup SPI1 multi-function pins */
-    SYS->P0_MFP = SYS_MFP_P05_MOSI_1 | SYS_MFP_P06_MISO_1 | SYS_MFP_P07_SPICLK1;
+    SYS->P0_MFP &= ~(SYS_MFP_P04_Msk | SYS_MFP_P05_Msk | SYS_MFP_P06_Msk | SYS_MFP_P07_Msk);
+    SYS->P0_MFP |= (SYS_MFP_P05_MOSI_1 | SYS_MFP_P06_MISO_1 | SYS_MFP_P07_SPICLK1);
 #if (!Slave3WireMode)
-    SYS->P0_MFP = SYS_MFP_P04_SPISS1;
+    SYS->P0_MFP |= SYS_MFP_P04_SPISS1;
 #endif
 
     /* Update System Core Clock */
