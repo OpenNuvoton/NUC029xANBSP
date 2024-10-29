@@ -20,12 +20,11 @@
 extern uint32_t Image$$RO$$Base;
 #endif
 
+typedef void (FUNC_PTR)(void);
 int32_t g_FMC_i32ErrCode;
 
 void SYS_Init(void)
 {
-	uint32_t u32TimeOutCnt;
-
     int32_t i;
     /*---------------------------------------------------------------------------------------------------------*/
     /* Init System Clock                                                                                       */
@@ -92,7 +91,10 @@ void UART0_Init(void)
 int32_t main(void)
 {
     uint8_t ch;
-    uint32_t u32Cfg;
+    uint32_t u32Data;
+    uint32_t u32Cfg, u32PDID;
+    volatile uint32_t u32BootAddr;
+    FUNC_PTR    *ResetFunc;
 
     /* Unlock protected registers for ISP function */
     SYS_UnlockReg();
@@ -130,6 +132,14 @@ int32_t main(void)
 
     printf("\nCPU @ %dHz\n\n", SystemCoreClock);
 
+    /* Check Chip type if it does not support H/W multi-boot */
+    u32PDID = SYS->PDID & 0xF000F000;
+    if((u32PDID == 0x10005000) | (u32PDID == 0x20005000))
+    {
+        printf("Warning: This chip does not support H/W multi-boot.\n");
+        goto lexit;
+    }
+
 #if defined(__ICCARM__)
     printf("VECMAP = 0x%x\n", FMC_GetVECMAP());
 #else
@@ -148,8 +158,10 @@ int32_t main(void)
             /* Set CBS to b'10 */
             u32Cfg &= ~0xc0ul;
             u32Cfg |= 0x80;
+            u32Data = FMC_Read(FMC_CONFIG_BASE + 0x4); /* Backup the data of config1 */
             FMC_Erase(FMC_CONFIG_BASE);
             FMC_Write(FMC_CONFIG_BASE, u32Cfg);
+            FMC_Write(FMC_CONFIG_BASE + 0x4, u32Data);
 
             printf("Press any key to reset system to enable new IAP mode ...\n");
             getchar();
@@ -174,27 +186,50 @@ int32_t main(void)
     switch(ch)
     {
         case '0':
-            FMC_SetVectorPageAddr(0x1000);
+            u32BootAddr = 0x1000;
             break;
         case '1':
-            FMC_SetVectorPageAddr(0x2000);
+            u32BootAddr = 0x2000;
             break;
         case '2':
-            FMC_SetVectorPageAddr(0x3000);
+            u32BootAddr = 0x3000;
             break;
         case '3':
-            FMC_SetVectorPageAddr(0x4000);
+            u32BootAddr = 0x4000;
             break;
         default:
-            FMC_SetVectorPageAddr(0x0);
+            u32BootAddr = 0x0000;
             break;
     }
 
-    /* Reset CPU only to reset to new vector page */
-    SYS->IPRSTC1 |= SYS_IPRSTC1_CPU_RST_Msk;
+    /* Disable all interrupts before change VECMAP */
+    NVIC->ICER[0] = 0xFFFFFFFF;
 
-    /* Reset System to reset to new vector page. */
-    //NVIC_SystemReset();
+    /* Set vector table of startup AP address */
+    FMC_SetVectorPageAddr(u32BootAddr);
+    if(FMC_GetVECMAP() != u32BootAddr)
+    {
+        printf("\nERROR: VECMAP isn't supported in current chip.\n");
+        goto lexit;
+    }
+
+    /* Reset All IP before boot to new AP */
+    SYS->IPRSTC2 = 0xFFFFFFFF;
+    SYS->IPRSTC2 = 0;
+
+    /* Obtain Reset Handler address of new boot. */
+    ResetFunc = (FUNC_PTR *)M32(4);
+
+#if defined(__ARMCC_VERSION) || defined(__ICCARM__)
+    /* Set Main Stack Pointer register of new boot */
+    __set_MSP(M32(0));
+#else
+    /* Set Main Stack Pointer register of new boot */
+    __set_MSP(M32(FMC_Read(u32BootAddr)));
+#endif
+
+    /* Call reset handler of new boot */
+    ResetFunc();
 
     while(1);
 
